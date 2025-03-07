@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 @Entity
 public class JobSeeker extends User {
 
-    @Column(nullable = false)
+    @Column
     private String resumeLink;
 
-    @Column(nullable = false)
+    @Column
     private String phoneNumber;
 
     public JobSeeker() {}

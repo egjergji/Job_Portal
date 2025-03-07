@@ -34,7 +34,7 @@ public class ReviewService {
         Review review = new Review(reviewDTO.getRating(), reviewDTO.getComment(), job, employer);
         Review savedReview = reviewRepository.save(review);
 
-        return new ReviewDTO(savedReview.getId(), savedReview.getRating(), savedReview.getComment(), job.getTitle(), employer.getUsername());
+        return new ReviewDTO( savedReview.getRating(), savedReview.getComment(), job, employer);
     }
 
     public List<ReviewDTO> getReviewsByJob(Long jobId) {
@@ -43,7 +43,7 @@ public class ReviewService {
 
         return reviewRepository.findByJob(job, null)
                 .stream()
-                .map(review -> new ReviewDTO(review.getId(), review.getRating(), review.getComment(), job.getTitle(), review.getEmployer().getUsername()))
+                .map(review -> new ReviewDTO(review.getRating(), review.getComment(), job, review.getEmployer()))
                 .collect(Collectors.toList());
     }
 }

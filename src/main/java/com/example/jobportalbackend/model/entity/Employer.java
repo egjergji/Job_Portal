@@ -1,17 +1,20 @@
 package com.example.jobportalbackend.model.entity;
 
 import com.example.jobportalbackend.model.enums.Role;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import jakarta.persistence.*;
+import org.hibernate.id.factory.IdentifierGeneratorFactory;
 
 
 @Entity
 public class Employer extends User {
 
-    @Column(nullable = false)
+    @Column
     private String companyName;
 
-    @Column(nullable = false)
-    private String companyDescription;
+    @Column
+    private String companyDescription = "No description";
 
     public Employer() {}
 

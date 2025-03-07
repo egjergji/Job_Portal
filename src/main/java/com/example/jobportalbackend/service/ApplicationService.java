@@ -35,7 +35,7 @@ public class ApplicationService {
         Application application = new Application(jobSeeker, job, ApplicationStatus.PENDING);
         Application savedApplication = applicationRepository.save(application);
 
-        return new ApplicationDTO(savedApplication.getId(), job.getTitle(), jobSeeker.getUsername(), savedApplication.getStatus().name());
+        return new ApplicationDTO(job, jobSeeker, savedApplication.getStatus());
     }
 
     public List<ApplicationDTO> getApplicationsByJobSeeker(Long jobSeekerId) {
@@ -44,7 +44,7 @@ public class ApplicationService {
 
         return applicationRepository.findByJobSeeker(jobSeeker, null)
                 .stream()
-                .map(app -> new ApplicationDTO(app.getId(), app.getJob().getTitle(), jobSeeker.getUsername(), app.getStatus().name()))
+                .map(app -> new ApplicationDTO(app.getJob(), jobSeeker, app.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -54,7 +54,7 @@ public class ApplicationService {
 
         return applicationRepository.findByJob(job, null)
                 .stream()
-                .map(app -> new ApplicationDTO(app.getId(), job.getTitle(), app.getJobSeeker().getUsername(), app.getStatus().name()))
+                .map(app -> new ApplicationDTO(job, app.getJobSeeker(), app.getStatus()))
                 .collect(Collectors.toList());
     }
 
