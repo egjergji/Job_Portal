@@ -9,6 +9,7 @@ import com.example.jobportalbackend.repository.UserRepository;
 import com.example.jobportalbackend.security.JwtUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -86,12 +87,13 @@ public class UserService {
     }
 
     public Page<UserDTO> getAllUsers(Role role, int page, int size) {
+        Pageable fixedPageable = PageRequest.of(page, 10);
         Page<User> users;
 
         if (role != null) {
-            users = userRepository.findByRole(role, PageRequest.of(page, size));
+            users = userRepository.findByRole(role, fixedPageable);
         } else {
-            users = userRepository.findAll(PageRequest.of(page, size));
+            users = userRepository.findAll(fixedPageable);
         }
 
         return users.map(user -> new UserDTO(user.getId(), user.getUsername(), user.getRole()));

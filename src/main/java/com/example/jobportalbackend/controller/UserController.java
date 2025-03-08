@@ -20,11 +20,13 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Page<UserDTO> getAllUsers(@RequestParam(required = false) Role role,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        return userService.getAllUsers(role, page, size);
+    public Page<UserDTO> getAllUsers(
+            @RequestParam(required = false) Role role,
+            @RequestParam(defaultValue = "0") int page) {
+
+        return userService.getAllUsers(role, page, 10);
     }
+
 
     @DeleteMapping("/users/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

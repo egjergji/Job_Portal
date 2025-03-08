@@ -5,6 +5,7 @@ import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.repository.JobRepository;
 import com.example.jobportalbackend.repository.EmployerRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,11 @@ public class JobService {
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() -> new RuntimeException("Employer not found"));
 
+        Pageable fixedPageable = PageRequest.of(pageable.getPageNumber(), 10);
+
         if (title != null && !title.isEmpty()) {
             return jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, pageable);
         }
-        return jobRepository.findByEmployer(employer, pageable);
+        return jobRepository.findByEmployer(employer, fixedPageable);
     }
 }
