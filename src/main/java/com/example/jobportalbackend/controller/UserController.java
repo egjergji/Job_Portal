@@ -8,6 +8,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 public class UserController {
@@ -20,11 +22,11 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Page<UserDTO> getAllUsers(
+    public List<UserDTO> getAllUsers(
             @RequestParam(required = false) Role role,
             @RequestParam(defaultValue = "0") int page) {
 
-        return userService.getAllUsers(role, page, 10);
+        return userService.getAllUsers(role, page, 10).getContent();
     }
 
 
