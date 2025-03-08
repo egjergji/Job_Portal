@@ -3,11 +3,12 @@ package com.example.jobportalbackend.service;
 import com.example.jobportalbackend.model.dto.ApplicationDTO;
 import com.example.jobportalbackend.model.entity.Application;
 import com.example.jobportalbackend.model.entity.Job;
-import com.example.jobportalbackend.model.entity.JobSeeker;
 import com.example.jobportalbackend.model.enums.ApplicationStatus;
 import com.example.jobportalbackend.repository.ApplicationRepository;
 import com.example.jobportalbackend.repository.JobRepository;
-import com.example.jobportalbackend.repository.JobSeekerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,49 +19,36 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
-    private final JobSeekerRepository jobSeekerRepository;
 
-    public ApplicationService(ApplicationRepository applicationRepository, JobRepository jobRepository, JobSeekerRepository jobSeekerRepository) {
+    public ApplicationService(ApplicationRepository applicationRepository, JobRepository jobRepository) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
-        this.jobSeekerRepository = jobSeekerRepository;
     }
 
-    public ApplicationDTO applyForJob(Long jobSeekerId, Long jobId) {
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("Job Seeker not found"));
-
-        Application application = new Application(jobSeeker, job, ApplicationStatus.PENDING);
-        Application savedApplication = applicationRepository.save(application);
-
-        return new ApplicationDTO(job, jobSeeker, savedApplication.getStatus());
-    }
-
-    public List<ApplicationDTO> getApplicationsByJobSeeker(Long jobSeekerId) {
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("Job Seeker not found"));
-
-        return applicationRepository.findByJobSeeker(jobSeeker, null)
-                .stream()
-                .map(app -> new ApplicationDTO(app.getJob(), jobSeeker, app.getStatus()))
-                .collect(Collectors.toList());
-    }
-
-    public List<ApplicationDTO> getApplicationsForJob(Long jobId) {
+    public Page<ApplicationDTO> getApplicationsForJob(Long jobId, ApplicationStatus status, Pageable pageable) {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        return applicationRepository.findByJob(job, null)
-                .stream()
-                .map(app -> new ApplicationDTO(job, app.getJobSeeker(), app.getStatus()))
+        // Use correct method with pagination
+        Page<Application> applicationPage = (status != null)
+                ? applicationRepository.findByJobAndStatus(job, status, pageable)
+                : applicationRepository.findByJob(job, pageable);
+
+        // Convert Page<Application> to Page<ApplicationDTO>
+        List<ApplicationDTO> dtos = applicationPage.getContent().stream()
+                .map(app -> new ApplicationDTO(app.getJob(), app.getJobSeeker(), app.getStatus()))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(dtos, pageable, applicationPage.getTotalElements());
     }
 
-    public void updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+    public void updateApplicationStatus(Long applicationId, Long employerId, Long jobId, ApplicationStatus status) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        if (!application.getJob().getEmployer().getId().equals(employerId)) {
+            throw new RuntimeException("Unauthorized: Only the employer who posted this job can update application status.");
+        }
 
         application.setStatus(status);
         applicationRepository.save(application);

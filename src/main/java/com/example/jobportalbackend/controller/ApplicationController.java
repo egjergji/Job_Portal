@@ -1,11 +1,8 @@
 package com.example.jobportalbackend.controller;
 
-import com.example.jobportalbackend.model.dto.ApplicationDTO;
-import com.example.jobportalbackend.model.enums.ApplicationStatus;
 import com.example.jobportalbackend.service.ApplicationService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -17,7 +14,7 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @PostMapping
+   /* @PostMapping
     public ApplicationDTO applyForJob(@RequestParam Long jobSeekerId, @RequestParam Long jobId) {
         return applicationService.applyForJob(jobSeekerId, jobId);
     }
@@ -35,5 +32,5 @@ public class ApplicationController {
     @PutMapping("/{applicationId}/status")
     public void updateApplicationStatus(@PathVariable Long applicationId, @RequestParam ApplicationStatus status) {
         applicationService.updateApplicationStatus(applicationId, status);
-    }
+    }*/
 }

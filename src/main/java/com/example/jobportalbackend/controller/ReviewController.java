@@ -4,8 +4,6 @@ import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.service.ReviewService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {
@@ -21,8 +19,8 @@ public class ReviewController {
         return reviewService.addReview(jobId, employerId, reviewDTO);
     }
 
-    @GetMapping("/{jobId}")
+   /* @GetMapping("/{jobId}")
     public List<ReviewDTO> getReviewsByJob(@PathVariable Long jobId) {
         return reviewService.getReviewsByJob(jobId);
-    }
+    }*/
 }

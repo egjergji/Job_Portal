@@ -4,8 +4,6 @@ import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.service.JobService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
@@ -21,8 +19,8 @@ public class JobController {
         return jobService.createJob(employerId, job);
     }
 
-    @GetMapping
+   /* @GetMapping
     public List<Job> getAllJobs() {
         return jobService.getAllJobs();
-    }
+    }*/
 }

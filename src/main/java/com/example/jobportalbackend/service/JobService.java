@@ -4,9 +4,9 @@ import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.repository.JobRepository;
 import com.example.jobportalbackend.repository.EmployerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class JobService {
@@ -26,7 +26,13 @@ public class JobService {
         return jobRepository.save(job);
     }
 
-    public List<Job> getAllJobs() {
-        return jobRepository.findAll();
+    public Page<Job> getJobsByEmployer(Long employerId, String title, Pageable pageable) {
+        Employer employer = employerRepository.findById(employerId)
+                .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+        if (title != null && !title.isEmpty()) {
+            return jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, pageable);
+        }
+        return jobRepository.findByEmployer(employer, pageable);
     }
 }

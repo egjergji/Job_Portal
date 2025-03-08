@@ -1,16 +1,12 @@
 package com.example.jobportalbackend.service;
 
 import com.example.jobportalbackend.model.dto.ReviewDTO;
-import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Review;
-import com.example.jobportalbackend.repository.ReviewRepository;
-import com.example.jobportalbackend.repository.JobRepository;
 import com.example.jobportalbackend.repository.EmployerRepository;
+import com.example.jobportalbackend.repository.JobRepository;
+import com.example.jobportalbackend.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -28,22 +24,14 @@ public class ReviewService {
     public ReviewDTO addReview(Long jobId, Long employerId, ReviewDTO reviewDTO) {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
-        Employer employer = employerRepository.findById(employerId)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
 
-        Review review = new Review(reviewDTO.getRating(), reviewDTO.getComment(), job, employer);
+        if (!job.getEmployer().getId().equals(employerId)) {
+            throw new RuntimeException("Unauthorized: Only the employer who posted this job can add reviews.");
+        }
+
+        Review review = new Review(reviewDTO.getRating(), reviewDTO.getComment(), job, job.getEmployer());
         Review savedReview = reviewRepository.save(review);
 
-        return new ReviewDTO( savedReview.getRating(), savedReview.getComment(), job, employer);
-    }
-
-    public List<ReviewDTO> getReviewsByJob(Long jobId) {
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
-
-        return reviewRepository.findByJob(job, null)
-                .stream()
-                .map(review -> new ReviewDTO(review.getRating(), review.getComment(), job, review.getEmployer()))
-                .collect(Collectors.toList());
+        return new ReviewDTO(savedReview.getRating(), savedReview.getComment(), job, job.getEmployer());
     }
 }
