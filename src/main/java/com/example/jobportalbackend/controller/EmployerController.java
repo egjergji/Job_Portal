@@ -40,7 +40,7 @@ public class EmployerController {
             @PathVariable Long employerId,
             @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);  // Set a fixed page size of 10
+        Pageable pageable = PageRequest.of(page, 10);
         return jobService.getJobsByEmployer(employerId, title, pageable).getContent();
     }
 
@@ -50,7 +50,7 @@ public class EmployerController {
             @PathVariable Long employerId, @PathVariable Long jobId,
             @RequestParam(required = false) ApplicationStatus status,
             @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);  // Set a fixed page size of 10
+        Pageable pageable = PageRequest.of(page, 10);
         return applicationService.getApplicationsForJob(jobId, status, pageable).getContent();
     }
 

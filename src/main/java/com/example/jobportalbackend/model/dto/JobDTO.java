@@ -1,19 +1,19 @@
 package com.example.jobportalbackend.model.dto;
 
-import com.example.jobportalbackend.model.entity.Employer;
-
 public class JobDTO {
     private Long id;
     private String title;
     private String description;
-    private Employer employer;
+    private Long employerId;
 
     public JobDTO() {}
 
-    public JobDTO(String title, String description, Employer employer) {
+    // ✅ Constructor including ID
+    public JobDTO(Long id, String title, String description, Long employerId) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.employer = employer;
+        this.employerId = employerId;
     }
 
     public Long getId() {
@@ -25,7 +25,7 @@ public class JobDTO {
     }
 
     public String getTitle() {
-                return title;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -40,11 +40,11 @@ public class JobDTO {
         this.description = description;
     }
 
-    public Employer getEmployer() {
-        return employer;
+    public Long getEmployerId() {
+        return employerId;
     }
 
-    public void setEmployer(Employer employer) {
-        this.employer = employer;
+    public void setEmployerId(Long employerId) {
+        this.employerId = employerId;
     }
 }

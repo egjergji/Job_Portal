@@ -19,8 +19,4 @@ public class JobController {
         return jobService.createJob(employerId, job);
     }
 
-   /* @GetMapping
-    public List<Job> getAllJobs() {
-        return jobService.getAllJobs();
-    }*/
 }

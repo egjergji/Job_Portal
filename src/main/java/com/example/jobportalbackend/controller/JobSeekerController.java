@@ -1,10 +1,12 @@
 package com.example.jobportalbackend.controller;
 
-import com.example.jobportalbackend.model.dto.JobSeekerDTO;
+import com.example.jobportalbackend.model.dto.ApplicationDTO;
+import com.example.jobportalbackend.model.dto.JobDTO;
 import com.example.jobportalbackend.service.JobSeekerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/jobseekers")
@@ -16,23 +18,37 @@ public class JobSeekerController {
         this.jobSeekerService = jobSeekerService;
     }
 
-    @GetMapping
-    public List<JobSeekerDTO> getAllJobSeekers() {
-        return jobSeekerService.getAllJobSeekers();
+    // ✅ Apply for a job
+    @PostMapping("/{jobSeekerId}/apply")
+    @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
+    public ApplicationDTO applyForJob(@PathVariable Long jobSeekerId, @RequestParam Long jobId) {
+        return jobSeekerService.applyForJob(jobSeekerId, jobId);
     }
 
-    @GetMapping("/{id}")
-    public JobSeekerDTO getJobSeekerById(@PathVariable Long id) {
-        return jobSeekerService.getJobSeekerById(id);
+    // ✅ Upload Resume
+    @PutMapping("/{jobSeekerId}/resume")
+    @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
+    public void uploadResume(@PathVariable Long jobSeekerId, @RequestParam String resumeLink) {
+        jobSeekerService.uploadResume(jobSeekerId, resumeLink);
     }
 
-    @PostMapping
-    public JobSeekerDTO createJobSeeker(@RequestBody JobSeekerDTO jobSeekerDTO) {
-        return jobSeekerService.createJobSeeker(jobSeekerDTO);
+    // ✅ Get all applications (Paginated & Filtered)
+    @GetMapping("/{jobSeekerId}/applications")
+    @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
+    public Page<ApplicationDTO> getApplicationsByJobSeeker(
+            @PathVariable Long jobSeekerId,
+            @RequestParam(required = false) String jobTitle,
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page) {
+        return jobSeekerService.getApplicationsByJobSeeker(jobSeekerId, jobTitle, status, PageRequest.of(page, 10));
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteJobSeeker(@PathVariable Long id) {
-        jobSeekerService.deleteJobSeeker(id);
+    // ✅ View all jobs (Paginated & Filtered, Excluding Location)
+    @GetMapping("/jobs")
+    public Page<JobDTO> viewAllJobs(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Long employerId,
+            @RequestParam(defaultValue = "0") int page) {
+        return jobSeekerService.viewAllJobs(title, employerId, PageRequest.of(page, 10));
     }
 }
