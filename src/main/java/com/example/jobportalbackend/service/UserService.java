@@ -1,12 +1,15 @@
 package com.example.jobportalbackend.service;
 
 import com.example.jobportalbackend.model.dto.UserDTO;
+import com.example.jobportalbackend.model.entity.Employer;
+import com.example.jobportalbackend.model.entity.JobSeeker;
 import com.example.jobportalbackend.model.entity.User;
 import com.example.jobportalbackend.model.enums.Role;
 import com.example.jobportalbackend.repository.UserRepository;
 import com.example.jobportalbackend.security.JwtUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,25 +32,6 @@ public class UserService {
         this.authenticationManager = authenticationManager;
     }
 
-    // ✅ Register a new user
-    public UserDTO register(UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
-
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Username already taken");
-        }
-
-        User newUser = new User(
-                userDTO.getUsername(),
-                passwordEncoder.encode(userDTO.getPassword()),  // ✅ Encrypt password
-                userDTO.getRole()
-        );
-
-        User savedUser = userRepository.save(newUser);
-
-        return new UserDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getRole());
-    }
-
     public String authenticate(UserDTO userDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
@@ -59,12 +43,68 @@ public class UserService {
         return jwtUtil.generateToken(user.getUsername());
     }
 
+    public UserDTO register(UserDTO userDTO) {
+        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
+
+        if (existingUser.isPresent()) {
+            throw new RuntimeException("Username already taken");
+        }
+
+        User newUser;
+
+        if (userDTO.getRole() == Role.EMPLOYER) {
+            newUser = new Employer(
+                    userDTO.getUsername(),
+                    passwordEncoder.encode(userDTO.getPassword()),
+                    Role.EMPLOYER,
+                    userDTO.getCompanyName(),
+                    userDTO.getCompanyDescription()
+            );
+        } else if (userDTO.getRole() == Role.JOBSEEKER) {
+            newUser = new JobSeeker(
+                    userDTO.getUsername(),
+                    passwordEncoder.encode(userDTO.getPassword()),
+                    Role.JOBSEEKER,
+                    userDTO.getResumeLink(),
+                    userDTO.getPhoneNumber()
+            );
+        } else {
+            newUser = new User(
+                    userDTO.getUsername(),
+                    passwordEncoder.encode(userDTO.getPassword()),
+                    Role.ADMIN
+            );
+        }
+
+        User savedUser = userRepository.save(newUser);
+
+        return new UserDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getRole(),
+                (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyName() : null,
+                (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyDescription() : null,
+                (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getResumeLink() : null,
+                (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getPhoneNumber() : null);
+    }
+
     public Page<UserDTO> getAllUsers(Role role, int page, int size) {
-        Page<User> users = userRepository.findByRole(role, PageRequest.of(page, size));
+        Page<User> users;
+
+        if (role != null) {
+            users = userRepository.findByRole(role, PageRequest.of(page, size));
+        } else {
+            users = userRepository.findAll(PageRequest.of(page, size));
+        }
+
         return users.map(user -> new UserDTO(user.getId(), user.getUsername(), user.getRole()));
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(@NonNull Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User with ID " + id + " not found");
+        }
         userRepository.deleteById(id);
     }
+
 }
+
+
+

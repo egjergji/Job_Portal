@@ -7,6 +7,10 @@ public class UserDTO {
     private String username;
     private String password;
     private Role role;
+    private String companyName; // ✅ Employer-specific
+    private String companyDescription; // ✅ Employer-specific
+    private String resumeLink; // ✅ JobSeeker-specific
+    private String phoneNumber; // ✅ JobSeeker-specific
 
     public UserDTO() {}
 
@@ -16,6 +20,49 @@ public class UserDTO {
         this.role = role;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyDescription() {
+        return companyDescription;
+    }
+
+    public void setCompanyDescription(String companyDescription) {
+        this.companyDescription = companyDescription;
+    }
+
+    public String getResumeLink() {
+        return resumeLink;
+    }
+
+    public void setResumeLink(String resumeLink) {
+        this.resumeLink = resumeLink;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserDTO(Long id, String username, Role role,
+                   String companyName, String companyDescription,
+                   String resumeLink, String phoneNumber) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.companyName = companyName;
+        this.companyDescription = companyDescription;
+        this.resumeLink = resumeLink;
+        this.phoneNumber = phoneNumber;
+    }
     public Long getId() {
         return id;
     }
