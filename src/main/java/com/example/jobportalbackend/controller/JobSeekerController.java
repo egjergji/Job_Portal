@@ -8,8 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/jobseekers")
+@RequestMapping("/api/jobseeker")
 public class JobSeekerController {
 
     private final JobSeekerService jobSeekerService;
@@ -21,7 +23,9 @@ public class JobSeekerController {
     // ✅ Apply for a job
     @PostMapping("/{jobSeekerId}/apply")
     @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
-    public ApplicationDTO applyForJob(@PathVariable Long jobSeekerId, @RequestParam Long jobId) {
+    public ApplicationDTO applyForJob(
+            @PathVariable Long jobSeekerId,
+            @RequestParam Long jobId) {
         return jobSeekerService.applyForJob(jobSeekerId, jobId);
     }
 
@@ -35,20 +39,20 @@ public class JobSeekerController {
     // ✅ Get all applications (Paginated & Filtered)
     @GetMapping("/{jobSeekerId}/applications")
     @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
-    public Page<ApplicationDTO> getApplicationsByJobSeeker(
+    public List<ApplicationDTO> getApplicationsByJobSeeker(
             @PathVariable Long jobSeekerId,
             @RequestParam(required = false) String jobTitle,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page) {
-        return jobSeekerService.getApplicationsByJobSeeker(jobSeekerId, jobTitle, status, PageRequest.of(page, 10));
+        return jobSeekerService.getApplicationsByJobSeeker(jobSeekerId, jobTitle, status, PageRequest.of(page, 10)).getContent();
     }
 
     // ✅ View all jobs (Paginated & Filtered, Excluding Location)
     @GetMapping("/jobs")
-    public Page<JobDTO> viewAllJobs(
+    public List<JobDTO> viewAllJobs(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Long employerId,
             @RequestParam(defaultValue = "0") int page) {
-        return jobSeekerService.viewAllJobs(title, employerId, PageRequest.of(page, 10));
+        return jobSeekerService.viewAllJobs(title, employerId, PageRequest.of(page, 10)).getContent();
     }
 }

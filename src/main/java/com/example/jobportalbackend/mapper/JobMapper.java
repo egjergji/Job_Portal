@@ -11,7 +11,7 @@ public class JobMapper extends AbstractMapper<Job, JobDTO> {
         job.setId(jobDTO.getId());
         job.setTitle(jobDTO.getTitle());
         job.setDescription(jobDTO.getDescription());
-        job.setEmployer(jobDTO.getEmployer());
+
         return job;
     }
 
@@ -24,7 +24,7 @@ public class JobMapper extends AbstractMapper<Job, JobDTO> {
         jobDTO.setId(job.getId());
         jobDTO.setTitle(job.getTitle());
         jobDTO.setDescription(job.getDescription());
-        jobDTO.setEmployer(job.getEmployer());
+        jobDTO.setEmployerId(job.getEmployer().getId());
         return jobDTO;
     }
 }

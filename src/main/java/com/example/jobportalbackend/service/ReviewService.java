@@ -6,6 +6,8 @@ import com.example.jobportalbackend.model.entity.Review;
 import com.example.jobportalbackend.repository.EmployerRepository;
 import com.example.jobportalbackend.repository.JobRepository;
 import com.example.jobportalbackend.repository.ReviewRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +22,25 @@ public class ReviewService {
         this.jobRepository = jobRepository;
         this.employerRepository = employerRepository;
     }
+
+    public Page<ReviewDTO> getReviewsForJob(Long jobId, Integer minRating, Pageable pageable) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        // ✅ Fetch reviews and convert them to ReviewDTO
+        Page<Review> reviews = (minRating != null)
+                ? reviewRepository.findByJobAndRatingGreaterThanEqual(job, minRating, pageable)
+                : reviewRepository.findByJob(job, pageable);
+
+        // ✅ Map `Page<Review>` to `Page<ReviewDTO>`
+        return reviews.map(review -> new ReviewDTO(
+                review.getRating(),
+                review.getComment(),
+                review.getJob(),
+                review.getEmployer()
+        ));
+    }
+
 
     public ReviewDTO addReview(Long jobId, Long employerId, ReviewDTO reviewDTO) {
         Job job = jobRepository.findById(jobId)

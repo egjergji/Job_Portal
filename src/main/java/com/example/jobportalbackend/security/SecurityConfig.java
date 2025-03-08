@@ -38,7 +38,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) //  Disable CSRF for REST API
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // ✅ Allow login & registration
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/reviews/**").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/employer/**").hasAuthority("ROLE_EMPLOYER")
                         .requestMatchers("/api/jpbseeker/**").hasAuthority("ROLE_JOB_SEEKER")

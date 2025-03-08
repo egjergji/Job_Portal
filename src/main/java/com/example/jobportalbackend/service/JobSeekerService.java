@@ -41,7 +41,7 @@ public class JobSeekerService {
 
         Application savedApplication = applicationRepository.save(application);
 
-        return new ApplicationDTO(savedApplication.getJob(), savedApplication.getJobSeeker(), savedApplication.getStatus());
+        return new ApplicationDTO(savedApplication.getId(), savedApplication.getJob(), savedApplication.getJobSeeker(), savedApplication.getStatus());
     }
 
     // ✅ Upload Resume
@@ -56,7 +56,7 @@ public class JobSeekerService {
     // ✅ Get all applications by job seeker (Pagination & Filtering)
     public Page<ApplicationDTO> getApplicationsByJobSeeker(Long jobSeekerId, String jobTitle, String status, Pageable pageable) {
         return applicationRepository.findApplicationsByJobSeeker(jobSeekerId, jobTitle, status, pageable)
-                .map(app -> new ApplicationDTO(app.getJob(), app.getJobSeeker(), app.getStatus()));
+                .map(app -> new ApplicationDTO(app.getId(), app.getJob(), app.getJobSeeker(), app.getStatus()));
     }
 
     public Page<JobDTO> viewAllJobs(String title, Long employerId, Pageable pageable) {

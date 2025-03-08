@@ -36,7 +36,7 @@ public class ApplicationService {
 
         // Convert Page<Application> to Page<ApplicationDTO>
         List<ApplicationDTO> dtos = applicationPage.getContent().stream()
-                .map(app -> new ApplicationDTO(app.getJob(), app.getJobSeeker(), app.getStatus()))
+                .map(app -> new ApplicationDTO(app.getId(), app.getJob(), app.getJobSeeker(), app.getStatus()))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(dtos, pageable, applicationPage.getTotalElements());

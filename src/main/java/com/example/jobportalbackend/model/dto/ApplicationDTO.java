@@ -12,8 +12,8 @@ public class ApplicationDTO {
 
     public ApplicationDTO() {}
 
-    public ApplicationDTO( Job job, JobSeeker jobSeeker, ApplicationStatus status) {
-
+    public ApplicationDTO( Long id, Job job, JobSeeker jobSeeker, ApplicationStatus status) {
+        this.id = id;
         this.job = job;
         this.jobSeeker = jobSeeker;
         this.status = status;
