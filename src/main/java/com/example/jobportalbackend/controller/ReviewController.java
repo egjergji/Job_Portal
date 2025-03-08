@@ -22,7 +22,7 @@ public class ReviewController {
             @PathVariable Long jobId,
             @RequestParam(required = false) Integer minRating,
             @RequestParam(defaultValue = "0") int page) {
-        return reviewServicez.getReviewsForJob(jobId, minRating, PageRequest.of(page, 10)).getContent();
+        return reviewService.getReviewsForJob(jobId, minRating, PageRequest.of(page, 10)).getContent();
     }
 
 }
