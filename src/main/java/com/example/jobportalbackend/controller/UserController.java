@@ -5,10 +5,11 @@ import com.example.jobportalbackend.model.enums.Role;
 import com.example.jobportalbackend.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class UserController {
 
     private final UserService userService;
@@ -18,6 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Page<UserDTO> getAllUsers(@RequestParam(required = false) Role role,
                                      @RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
@@ -25,6 +27,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/delete/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteUser(@PathVariable @NonNull Long id) {
         userService.deleteUser(id);
     }

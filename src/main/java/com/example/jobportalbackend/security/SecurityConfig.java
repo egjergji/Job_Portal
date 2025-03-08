@@ -38,13 +38,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) //  Disable CSRF for REST API
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // ✅ Allow login & registration
-                        .requestMatchers("/users/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/jobs/**").hasAuthority("ROLE_EMPLOYER")
-                        .requestMatchers("/applications/**").hasAuthority("ROLE_JOB_SEEKER")
+                        .requestMatchers("/api/auth/**").permitAll() // ✅ Allow login & registration
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/employer/**").hasAuthority("ROLE_EMPLOYER")
+                        .requestMatchers("/api/jpbseeker/**").hasAuthority("ROLE_JOB_SEEKER")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ✅ Stateless sessions for JWT
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
