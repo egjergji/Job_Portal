@@ -3,7 +3,6 @@ package com.example.jobportalbackend.controller;
 import com.example.jobportalbackend.model.dto.ApplicationDTO;
 import com.example.jobportalbackend.model.dto.JobDTO;
 import com.example.jobportalbackend.service.JobSeekerService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

@@ -29,12 +29,12 @@ public class ApplicationService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        // Use correct method with pagination
+
         Page<Application> applicationPage = (status != null)
                 ? applicationRepository.findByJobAndStatus(job, status, pageable)
                 : applicationRepository.findByJob(job, pageable);
 
-        // Convert Page<Application> to Page<ApplicationDTO>
+
         List<ApplicationDTO> dtos = applicationPage.getContent().stream()
                 .map(app -> new ApplicationDTO(app.getId(), app.getJob(), app.getJobSeeker(), app.getStatus()))
                 .collect(Collectors.toList());

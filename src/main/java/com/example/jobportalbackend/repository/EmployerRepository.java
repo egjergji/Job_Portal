@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface EmployerRepository extends JpaRepository<Employer, Long> {
 
-    // ✅ Find an employer by username (useful for authentication or employer lookup)
+
     Optional<Employer> findByUsername(String username);
 }

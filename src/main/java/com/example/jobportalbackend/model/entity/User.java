@@ -25,7 +25,6 @@ public class User {
 
     public User() {}
 
-    // ✅ Fix: Removed unnecessary id parameter
     public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;

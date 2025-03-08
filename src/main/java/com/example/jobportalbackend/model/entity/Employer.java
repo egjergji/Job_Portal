@@ -14,7 +14,6 @@ public class Employer extends User {
 
     public Employer() {}
 
-    // ✅ Fix: Removed `id` parameter, use correct parent constructor
     public Employer(String username, String password, Role role, String companyName, String companyDescription) {
         super(username, password, role);
         this.companyName = companyName;

@@ -8,9 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    // ✅ Get all reviews for a job
+
     Page<Review> findByJob(Job job, Pageable pageable);
 
-    // ✅ Get reviews filtered by rating
     Page<Review> findByJobAndRatingGreaterThanEqual(Job job, int minRating, Pageable pageable);
 }

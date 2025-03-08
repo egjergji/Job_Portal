@@ -8,7 +8,7 @@ public class JobDTO {
 
     public JobDTO() {}
 
-    // ✅ Constructor including ID
+
     public JobDTO(Long id, String title, String description, Long employerId) {
         this.id = id;
         this.title = title;

@@ -14,7 +14,6 @@ public class JobSeeker extends User {
 
     public JobSeeker() {}
 
-    // ✅ Fix: Removed `id` parameter, use correct parent constructor
     public JobSeeker(String username, String password, Role role, String resumeLink, String phoneNumber) {
         super(username, password, role);
         this.resumeLink = resumeLink;

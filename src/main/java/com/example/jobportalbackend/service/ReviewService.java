@@ -27,12 +27,12 @@ public class ReviewService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        // ✅ Fetch reviews and convert them to ReviewDTO
+        //Get review and convert form <Review> to <ReviewDTO>
         Page<Review> reviews = (minRating != null)
                 ? reviewRepository.findByJobAndRatingGreaterThanEqual(job, minRating, pageable)
                 : reviewRepository.findByJob(job, pageable);
 
-        // ✅ Map `Page<Review>` to `Page<ReviewDTO>`
+
         return reviews.map(review -> new ReviewDTO(
                 review.getRating(),
                 review.getComment(),

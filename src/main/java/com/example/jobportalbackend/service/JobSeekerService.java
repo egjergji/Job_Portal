@@ -53,7 +53,7 @@ public class JobSeekerService {
         jobSeekerRepository.save(jobSeeker);
     }
 
-    // ✅ Get all applications by job seeker (Pagination & Filtering)
+
     public Page<ApplicationDTO> getApplicationsByJobSeeker(Long jobSeekerId, String jobTitle, String status, Pageable pageable) {
         return applicationRepository.findApplicationsByJobSeeker(jobSeekerId, jobTitle, status, pageable)
                 .map(app -> new ApplicationDTO(app.getId(), app.getJob(), app.getJobSeeker(), app.getStatus()));

@@ -79,7 +79,7 @@ public class UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        return new UserDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getRole(),
+        return new UserDTO(savedUser.getId(), savedUser.getPassword(), savedUser.getUsername(), savedUser.getRole(),
                 (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyName() : null,
                 (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyDescription() : null,
                 (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getResumeLink() : null,
