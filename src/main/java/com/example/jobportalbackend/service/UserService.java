@@ -27,7 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-    private final UserMapper userMapper; // ✅ Inject UserMapper
+    private final UserMapper userMapper;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        JwtUtil jwtUtil, AuthenticationManager authenticationManager,
@@ -112,7 +112,7 @@ public class UserService {
         return userMapper.toDto(savedUser);
     }
 
-    // ✅ Get All Users (Uses UserMapper)
+
     public Page<UserDTO> getAllUsers(Role role, int page) {
         Pageable fixedPageable = PageRequest.of(page, 10);
         Page<User> users = (role != null)

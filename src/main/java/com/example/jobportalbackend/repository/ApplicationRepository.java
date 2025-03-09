@@ -2,6 +2,7 @@ package com.example.jobportalbackend.repository;
 
 import com.example.jobportalbackend.model.entity.Application;
 import com.example.jobportalbackend.model.entity.Job;
+import com.example.jobportalbackend.model.entity.JobSeeker;
 import com.example.jobportalbackend.model.enums.ApplicationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Page<Application> findByJob(Job job, Pageable pageable);
 
     Page<Application> findByJobAndStatus(Job job, ApplicationStatus status, Pageable pageable);
+
+    boolean existsByJobSeekerAndJob(JobSeeker jobSeeker, Job job);
 }

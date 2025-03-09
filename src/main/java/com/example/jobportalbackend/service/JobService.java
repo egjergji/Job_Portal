@@ -17,7 +17,7 @@ public class JobService {
 
     private final JobRepository jobRepository;
     private final EmployerRepository employerRepository;
-    private final JobMapper jobMapper;  // ✅ Inject JobMapper
+    private final JobMapper jobMapper;
 
     public JobService(JobRepository jobRepository, EmployerRepository employerRepository, JobMapper jobMapper) {
         this.jobRepository = jobRepository;
@@ -25,19 +25,19 @@ public class JobService {
         this.jobMapper = jobMapper;
     }
 
-    // ✅ Create Job (Handles Mapping)
+
     public JobDTO createJob(Long employerId, JobDTO jobDTO) {
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + employerId + " not found"));
 
-        Job job = jobMapper.toEntity(jobDTO);  // ✅ Convert DTO to Entity
+        Job job = jobMapper.toEntity(jobDTO);
         job.setEmployer(employer);
 
         Job savedJob = jobRepository.save(job);
-        return jobMapper.toDto(savedJob);  // ✅ Convert Entity to DTO before returning
+        return jobMapper.toDto(savedJob);
     }
 
-    // ✅ Get Jobs by Employer (Returns Page<JobDTO> instead of Page<Job>)
+
     public Page<JobDTO> getJobsByEmployer(Long employerId, String title, int page) {
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + employerId + " not found"));
@@ -48,6 +48,6 @@ public class JobService {
                 ? jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, fixedPageable)
                 : jobRepository.findByEmployer(employer, fixedPageable);
 
-        return jobs.map(jobMapper::toDto);  // ✅ Convert Page<Job> to Page<JobDTO>
+        return jobs.map(jobMapper::toDto);
     }
 }

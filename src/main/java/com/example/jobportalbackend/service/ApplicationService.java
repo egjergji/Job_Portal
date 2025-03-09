@@ -19,7 +19,7 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
-    private final ApplicationMapper applicationMapper;  // ✅ Inject ApplicationMapper
+    private final ApplicationMapper applicationMapper;
 
     public ApplicationService(ApplicationRepository applicationRepository,
                               JobRepository jobRepository,
@@ -29,21 +29,25 @@ public class ApplicationService {
         this.applicationMapper = applicationMapper;
     }
 
-    // ✅ Get Applications for a Job (Handles Job Not Found, Uses ApplicationMapper)
-    public Page<ApplicationDTO> getApplicationsForJob(Long jobId, ApplicationStatus status, int page) {
+
+    public Page<ApplicationDTO> getApplicationsForJob(Long employerId, Long jobId, ApplicationStatus status, int page) {
         Pageable fixedPageable = PageRequest.of(page, 10);
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job with ID " + jobId + " not found"));
 
+
+        if (!job.getEmployer().getId().equals(employerId)) {
+            throw new UnauthorizedActionException("Unauthorized: You can only view applications for jobs you posted.");
+        }
+
         Page<Application> applicationPage = (status != null)
                 ? applicationRepository.findByJobAndStatus(job, status, fixedPageable)
                 : applicationRepository.findByJob(job, fixedPageable);
 
-        return applicationPage.map(applicationMapper::toDto);  // ✅ Uses ApplicationMapper
+        return applicationPage.map(applicationMapper::toDto);
     }
 
-    // ✅ Update Application Status (Handles Unauthorized Access, Uses ApplicationMapper)
     public void updateApplicationStatus(Long applicationId, Long employerId, Long jobId, ApplicationStatus status) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Application with ID " + applicationId + " not found"));

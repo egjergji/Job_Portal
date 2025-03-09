@@ -65,7 +65,7 @@ public class EmployerController {
             @RequestParam(defaultValue = "0") int page,
             HttpServletRequest request) {
         Long employerId = getAuthenticatedEmployerId(request);
-        return applicationService.getApplicationsForJob(jobId, status, page).getContent();
+        return applicationService.getApplicationsForJob(employerId, jobId, status, page).getContent();
     }
 
     @PutMapping("/jobs/{jobId}/applications/{applicationId}/status")
