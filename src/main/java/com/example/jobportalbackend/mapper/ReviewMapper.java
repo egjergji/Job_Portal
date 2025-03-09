@@ -9,6 +9,9 @@ public class ReviewMapper extends AbstractMapper<Review, ReviewDTO> {
 
     @Override
     public Review toEntity(ReviewDTO reviewDTO) {
+        if (reviewDTO == null) {
+            return null;
+        }
         Review review = new Review();
         review.setId(reviewDTO.getId());
         review.setRating(reviewDTO.getRating());

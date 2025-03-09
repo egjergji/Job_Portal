@@ -1,8 +1,11 @@
 package com.example.jobportalbackend.service;
 
 import com.example.jobportalbackend.exception.ResourceNotFoundException;
+import com.example.jobportalbackend.mapper.JobSeekerMapper;
+import com.example.jobportalbackend.mapper.JobMapper;
 import com.example.jobportalbackend.model.dto.ApplicationDTO;
 import com.example.jobportalbackend.model.dto.JobDTO;
+import com.example.jobportalbackend.model.dto.JobSeekerDTO;
 import com.example.jobportalbackend.model.entity.Application;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.JobSeeker;
@@ -21,11 +24,17 @@ public class JobSeekerService {
     private final JobSeekerRepository jobSeekerRepository;
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
+    private final JobSeekerMapper jobSeekerMapper; // ✅ Inject JobSeekerMapper
+    private final JobMapper jobMapper; // ✅ Inject JobMapper
 
-    public JobSeekerService(JobSeekerRepository jobSeekerRepository, JobRepository jobRepository, ApplicationRepository applicationRepository) {
+    public JobSeekerService(JobSeekerRepository jobSeekerRepository, JobRepository jobRepository,
+                            ApplicationRepository applicationRepository, JobSeekerMapper jobSeekerMapper,
+                            JobMapper jobMapper) {
         this.jobSeekerRepository = jobSeekerRepository;
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
+        this.jobSeekerMapper = jobSeekerMapper;
+        this.jobMapper = jobMapper;
     }
 
     // ✅ Apply for a Job (Handles Job & Job Seeker Not Found)
@@ -66,9 +75,17 @@ public class JobSeekerService {
                 .map(app -> new ApplicationDTO(app.getId(), app.getJob(), app.getJobSeeker(), app.getStatus()));
     }
 
+    // ✅ Get Job Seeker by ID (Returns JobSeekerDTO)
+    public JobSeekerDTO getJobSeekerById(Long id) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Job Seeker with ID " + id + " not found"));
 
+        return jobSeekerMapper.toDto(jobSeeker);
+    }
+
+    // ✅ View All Jobs (Returns Page<JobDTO>)
     public Page<JobDTO> viewAllJobs(String title, Long employerId, Pageable pageable) {
         return jobRepository.findJobsWithFilters(title, employerId, pageable)
-                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getDescription(), job.getEmployer().getId()));
+                .map(jobMapper::toDto); // ✅ Uses JobMapper
     }
 }

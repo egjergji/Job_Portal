@@ -1,6 +1,8 @@
 package com.example.jobportalbackend.mapper;
 
 import com.example.jobportalbackend.model.dto.UserDTO;
+import com.example.jobportalbackend.model.entity.Employer;
+import com.example.jobportalbackend.model.entity.JobSeeker;
 import com.example.jobportalbackend.model.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,9 @@ public class UserMapper extends AbstractMapper<User, UserDTO> {
 
     @Override
     public User toEntity(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        }
         User user = new User();
         user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());
@@ -22,11 +27,15 @@ public class UserMapper extends AbstractMapper<User, UserDTO> {
         if (user == null) {
             return null;
         }
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setRole(user.getRole());
-        return userDTO;
+        return new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole(),
+                (user instanceof Employer) ? ((Employer) user).getCompanyName() : null,
+                (user instanceof Employer) ? ((Employer) user).getCompanyDescription() : null,
+                (user instanceof JobSeeker) ? ((JobSeeker) user).getResumeLink() : null,
+                (user instanceof JobSeeker) ? ((JobSeeker) user).getPhoneNumber() : null
+        );
     }
 }

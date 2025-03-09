@@ -3,6 +3,7 @@ package com.example.jobportalbackend.service;
 import com.example.jobportalbackend.exception.ResourceNotFoundException;
 import com.example.jobportalbackend.exception.DuplicateResourceException;
 import com.example.jobportalbackend.exception.AuthenticationException;
+import com.example.jobportalbackend.mapper.UserMapper;
 import com.example.jobportalbackend.model.dto.UserDTO;
 import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.model.entity.JobSeeker;
@@ -19,7 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserService {
 
@@ -27,14 +27,19 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper; // ✅ Inject UserMapper
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       JwtUtil jwtUtil, AuthenticationManager authenticationManager,
+                       UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.userMapper = userMapper;
     }
 
+    // ✅ Authenticate User (Uses UserMapper)
     public String authenticate(UserDTO userDTO) {
         try {
             authenticationManager.authenticate(
@@ -50,6 +55,7 @@ public class UserService {
         }
     }
 
+    // ✅ Register User (Handles Duplicate User, Uses UserMapper)
     public UserDTO register(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new DuplicateResourceException("Username already taken");
@@ -81,25 +87,20 @@ public class UserService {
         }
 
         User savedUser = userRepository.save(newUser);
-
-        return new UserDTO(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getPassword(),
-                savedUser.getRole(),
-                (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyName() : null,
-                (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyDescription() : null,
-                (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getResumeLink() : null,
-                (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getPhoneNumber() : null);
+        return userMapper.toDto(savedUser);  // ✅ Uses UserMapper
     }
 
+    // ✅ Get All Users (Uses UserMapper)
     public Page<UserDTO> getAllUsers(Role role, int page) {
         Pageable fixedPageable = PageRequest.of(page, 10);
-        Page<User> users = (role != null) ? userRepository.findByRole(role, fixedPageable) : userRepository.findAll(fixedPageable);
+        Page<User> users = (role != null)
+                ? userRepository.findByRole(role, fixedPageable)
+                : userRepository.findAll(fixedPageable);
 
-        return users.map(user -> new UserDTO(user.getId(), user.getUsername(), user.getRole()));
+        return users.map(userMapper::toDto);  // ✅ Uses UserMapper
     }
 
+    // ✅ Delete User by ID (Handles User Not Found)
     public void deleteUser(@NonNull Long id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User with ID " + id + " not found");

@@ -9,6 +9,9 @@ public class ApplicationMapper extends AbstractMapper<Application, ApplicationDT
 
     @Override
     public Application toEntity(ApplicationDTO applicationDTO) {
+        if (applicationDTO == null) {
+            return null;
+        }
         Application application = new Application();
         application.setId(applicationDTO.getId());
         application.setJob(applicationDTO.getJob());

@@ -21,21 +21,21 @@ public class EmployerService {
         this.employerMapper = employerMapper;
     }
 
-    // ✅ Get Employer by ID (Handles Employer Not Found)
+    // ✅ Get Employer by ID (Uses EmployerMapper)
     public EmployerDTO getEmployerById(Long id) {
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + id + " not found"));
-        return employerMapper.toDto(employer);
+
+        return employerMapper.toDto(employer);  // ✅ Uses EmployerMapper
     }
 
-    // ✅ Create Employer (Handles Duplicate Employer)
+    // ✅ Create Employer (Handles Duplicate Employer, Uses EmployerMapper)
     public EmployerDTO createEmployer(EmployerDTO employerDTO) {
-        Optional<Employer> existingEmployer = employerRepository.findByUsername(employerDTO.getUsername());
-        if (existingEmployer.isPresent()) {
+        if (employerRepository.findByUsername(employerDTO.getUsername()).isPresent()) {
             throw new DuplicateResourceException("Employer with username '" + employerDTO.getUsername() + "' already exists");
         }
 
-        Employer employer = employerMapper.toEntity(employerDTO);
+        Employer employer = employerMapper.toEntity(employerDTO);  // ✅ Uses EmployerMapper
         Employer savedEmployer = employerRepository.save(employer);
         return employerMapper.toDto(savedEmployer);
     }

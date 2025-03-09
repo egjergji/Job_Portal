@@ -2,6 +2,7 @@ package com.example.jobportalbackend.service;
 
 import com.example.jobportalbackend.exception.ResourceNotFoundException;
 import com.example.jobportalbackend.exception.UnauthorizedActionException;
+import com.example.jobportalbackend.mapper.ReviewMapper;
 import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Review;
@@ -18,28 +19,25 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final JobRepository jobRepository;
     private final EmployerRepository employerRepository;
+    private final ReviewMapper reviewMapper;
 
-    public ReviewService(ReviewRepository reviewRepository, JobRepository jobRepository, EmployerRepository employerRepository) {
+    public ReviewService(ReviewRepository reviewRepository, JobRepository jobRepository,
+                         EmployerRepository employerRepository, ReviewMapper reviewMapper) {
         this.reviewRepository = reviewRepository;
         this.jobRepository = jobRepository;
         this.employerRepository = employerRepository;
+        this.reviewMapper = reviewMapper;
     }
 
     public Page<ReviewDTO> getReviewsForJob(Long jobId, Integer minRating, Pageable pageable) {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job with ID " + jobId + " not found"));
 
-
         Page<Review> reviews = (minRating != null)
                 ? reviewRepository.findByJobAndRatingGreaterThanEqual(job, minRating, pageable)
                 : reviewRepository.findByJob(job, pageable);
 
-        return reviews.map(review -> new ReviewDTO(
-                review.getRating(),
-                review.getComment(),
-                review.getJob(),
-                review.getEmployer()
-        ));
+        return reviews.map(reviewMapper::toDto);
     }
 
     public ReviewDTO addReview(Long jobId, Long employerId, ReviewDTO reviewDTO) {
@@ -50,9 +48,11 @@ public class ReviewService {
             throw new UnauthorizedActionException("Unauthorized: Only the employer who posted this job can add reviews.");
         }
 
-        Review review = new Review(reviewDTO.getRating(), reviewDTO.getComment(), job, job.getEmployer());
-        Review savedReview = reviewRepository.save(review);
+        Review review = reviewMapper.toEntity(reviewDTO);
+        review.setJob(job);
+        review.setEmployer(job.getEmployer());
 
-        return new ReviewDTO(savedReview.getRating(), savedReview.getComment(), job, job.getEmployer());
+        Review savedReview = reviewRepository.save(review);
+        return reviewMapper.toDto(savedReview);
     }
 }

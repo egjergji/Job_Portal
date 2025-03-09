@@ -9,11 +9,13 @@ public class JobMapper extends AbstractMapper<Job, JobDTO> {
 
     @Override
     public Job toEntity(JobDTO jobDTO) {
+        if (jobDTO == null) {
+            return null;
+        }
         Job job = new Job();
         job.setId(jobDTO.getId());
         job.setTitle(jobDTO.getTitle());
         job.setDescription(jobDTO.getDescription());
-
         return job;
     }
 
@@ -26,7 +28,11 @@ public class JobMapper extends AbstractMapper<Job, JobDTO> {
         jobDTO.setId(job.getId());
         jobDTO.setTitle(job.getTitle());
         jobDTO.setDescription(job.getDescription());
-        jobDTO.setEmployerId(job.getEmployer().getId());
+
+        // ✅ Ensure we avoid NullPointerException for employer
+        if (job.getEmployer() != null) {
+            jobDTO.setEmployerId(job.getEmployer().getId());
+        }
         return jobDTO;
     }
 }
