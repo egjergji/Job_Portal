@@ -25,7 +25,7 @@ public class UserController {
             @RequestParam(required = false) Role role,
             @RequestParam(defaultValue = "0") int page) {
 
-        return userService.getAllUsers(role, page, 10).getContent();
+        return userService.getAllUsers(role, page).getContent();
     }
 
 

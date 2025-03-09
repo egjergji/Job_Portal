@@ -2,9 +2,13 @@ package com.example.jobportalbackend.mapper;
 
 import com.example.jobportalbackend.model.dto.EmployerDTO;
 import com.example.jobportalbackend.model.entity.Employer;
+import org.springframework.stereotype.Component;
 
-public class EmployerMapper {
-    public static EmployerDTO toDTO(Employer employer) {
+
+@Component
+public class EmployerMapper extends AbstractMapper<Employer, EmployerDTO> {
+    @Override
+    public EmployerDTO toDto(Employer employer) {
         EmployerDTO employerDTO = new EmployerDTO();
         employerDTO.setId(employer.getId());
         employerDTO.setUsername(employer.getUsername());
@@ -13,7 +17,8 @@ public class EmployerMapper {
         return employerDTO;
     }
 
-    public static Employer toEntity(EmployerDTO employerDTO) {
+    @Override
+    public Employer toEntity(EmployerDTO employerDTO) {
         Employer employer = new Employer();
         employer.setUsername(employerDTO.getUsername());
         employer.setCompanyName(employerDTO.getCompanyName());

@@ -1,5 +1,8 @@
 package com.example.jobportalbackend.service;
 
+import com.example.jobportalbackend.exception.ResourceNotFoundException;
+import com.example.jobportalbackend.exception.DuplicateResourceException;
+import com.example.jobportalbackend.exception.AuthenticationException;
 import com.example.jobportalbackend.model.dto.UserDTO;
 import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.model.entity.JobSeeker;
@@ -16,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,25 +36,26 @@ public class UserService {
     }
 
     public String authenticate(UserDTO userDTO) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
+            );
 
-        User user = userRepository.findByUsername(userDTO.getUsername())
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+            User user = userRepository.findByUsername(userDTO.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("Invalid username or password"));
 
-        return jwtUtil.generateToken(user.getUsername());
+            return jwtUtil.generateToken(user.getUsername());
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            throw new AuthenticationException("Invalid username or password");
+        }
     }
 
     public UserDTO register(UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
-
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Username already taken");
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("Username already taken");
         }
 
         User newUser;
-
         if (userDTO.getRole() == Role.EMPLOYER) {
             newUser = new Employer(
                     userDTO.getUsername(),
@@ -79,34 +82,28 @@ public class UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        return new UserDTO(savedUser.getId(), savedUser.getPassword(), savedUser.getUsername(), savedUser.getRole(),
+        return new UserDTO(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getPassword(),
+                savedUser.getRole(),
                 (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyName() : null,
                 (savedUser instanceof Employer) ? ((Employer) savedUser).getCompanyDescription() : null,
                 (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getResumeLink() : null,
                 (savedUser instanceof JobSeeker) ? ((JobSeeker) savedUser).getPhoneNumber() : null);
     }
 
-    public Page<UserDTO> getAllUsers(Role role, int page, int size) {
+    public Page<UserDTO> getAllUsers(Role role, int page) {
         Pageable fixedPageable = PageRequest.of(page, 10);
-        Page<User> users;
-
-        if (role != null) {
-            users = userRepository.findByRole(role, fixedPageable);
-        } else {
-            users = userRepository.findAll(fixedPageable);
-        }
+        Page<User> users = (role != null) ? userRepository.findByRole(role, fixedPageable) : userRepository.findAll(fixedPageable);
 
         return users.map(user -> new UserDTO(user.getId(), user.getUsername(), user.getRole()));
     }
 
     public void deleteUser(@NonNull Long id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User with ID " + id + " not found");
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
         }
         userRepository.deleteById(id);
     }
-
 }
-
-
-

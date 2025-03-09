@@ -7,8 +7,6 @@ import com.example.jobportalbackend.model.enums.ApplicationStatus;
 import com.example.jobportalbackend.service.ApplicationService;
 import com.example.jobportalbackend.service.JobService;
 import com.example.jobportalbackend.service.ReviewService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +38,7 @@ public class EmployerController {
             @PathVariable Long employerId,
             @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return jobService.getJobsByEmployer(employerId, title, pageable).getContent();
+        return jobService.getJobsByEmployer(employerId, title, page).getContent();
     }
 
     @GetMapping("/{employerId}/jobs/{jobId}/applications")
@@ -50,8 +47,7 @@ public class EmployerController {
             @PathVariable Long employerId, @PathVariable Long jobId,
             @RequestParam(required = false) ApplicationStatus status,
             @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return applicationService.getApplicationsForJob(jobId, status, pageable).getContent();
+        return applicationService.getApplicationsForJob(jobId, status, page).getContent();
     }
 
     @PutMapping("/{employerId}/jobs/{jobId}/applications/{applicationId}/status")

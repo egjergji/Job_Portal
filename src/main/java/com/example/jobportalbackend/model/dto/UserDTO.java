@@ -12,8 +12,6 @@ public class UserDTO {
     private String resumeLink;
     private String phoneNumber;
 
-    // ❌ Removed password to prevent security issues
-    // ❌ Removed unnecessary constructors
 
     public UserDTO() {}
 
@@ -23,10 +21,10 @@ public class UserDTO {
         this.role = role;
     }
 
-    public UserDTO(Long id, String password, String username, Role role,
+    public UserDTO(Long id,String username, String password, Role role,
                    String companyName, String companyDescription,
                    String resumeLink, String phoneNumber) {
-        this.id = id;
+        this.id =id;
         this.username = username;
         this.password = password;
         this.role = role;
@@ -35,6 +33,8 @@ public class UserDTO {
         this.resumeLink = resumeLink;
         this.phoneNumber = phoneNumber;
     }
+
+
 
     public Long getId() {
         return id;

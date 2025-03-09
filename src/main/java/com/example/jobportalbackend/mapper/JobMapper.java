@@ -2,7 +2,9 @@ package com.example.jobportalbackend.mapper;
 
 import com.example.jobportalbackend.model.dto.JobDTO;
 import com.example.jobportalbackend.model.entity.Job;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JobMapper extends AbstractMapper<Job, JobDTO> {
 
     @Override

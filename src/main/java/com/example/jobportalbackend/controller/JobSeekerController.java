@@ -43,7 +43,7 @@ public class JobSeekerController {
             @RequestParam(required = false) String jobTitle,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page) {
-        return jobSeekerService.getApplicationsByJobSeeker(jobSeekerId, jobTitle, status, PageRequest.of(page, 10)).getContent();
+        return jobSeekerService.getApplicationsByJobSeeker(jobSeekerId, jobTitle, status, page).getContent();
     }
 
     // ✅ View all jobs (Paginated & Filtered, Excluding Location)

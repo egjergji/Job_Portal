@@ -1,5 +1,6 @@
 package com.example.jobportalbackend.service;
 
+import com.example.jobportalbackend.exception.ResourceNotFoundException;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.repository.JobRepository;
@@ -22,19 +23,20 @@ public class JobService {
 
     public Job createJob(Long employerId, Job job) {
         Employer employer = employerRepository.findById(employerId)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + employerId + " not found"));
         job.setEmployer(employer);
         return jobRepository.save(job);
     }
 
-    public Page<Job> getJobsByEmployer(Long employerId, String title, Pageable pageable) {
+    public Page<Job> getJobsByEmployer(Long employerId, String title, int page) {
         Employer employer = employerRepository.findById(employerId)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + employerId + " not found"));
 
-        Pageable fixedPageable = PageRequest.of(pageable.getPageNumber(), 10);
+        // Fix pageable size limitation
+        Pageable fixedPageable = PageRequest.of(page , 10 );
 
         if (title != null && !title.isEmpty()) {
-            return jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, pageable);
+            return jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, fixedPageable);
         }
         return jobRepository.findByEmployer(employer, fixedPageable);
     }

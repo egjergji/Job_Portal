@@ -1,5 +1,7 @@
 package com.example.jobportalbackend.service;
 
+import com.example.jobportalbackend.exception.ResourceNotFoundException;
+import com.example.jobportalbackend.exception.UnauthorizedActionException;
 import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Review;
@@ -25,13 +27,12 @@ public class ReviewService {
 
     public Page<ReviewDTO> getReviewsForJob(Long jobId, Integer minRating, Pageable pageable) {
         Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Job with ID " + jobId + " not found"));
 
-        //Get review and convert form <Review> to <ReviewDTO>
+
         Page<Review> reviews = (minRating != null)
                 ? reviewRepository.findByJobAndRatingGreaterThanEqual(job, minRating, pageable)
                 : reviewRepository.findByJob(job, pageable);
-
 
         return reviews.map(review -> new ReviewDTO(
                 review.getRating(),
@@ -41,13 +42,12 @@ public class ReviewService {
         ));
     }
 
-
     public ReviewDTO addReview(Long jobId, Long employerId, ReviewDTO reviewDTO) {
         Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Job with ID " + jobId + " not found"));
 
         if (!job.getEmployer().getId().equals(employerId)) {
-            throw new RuntimeException("Unauthorized: Only the employer who posted this job can add reviews.");
+            throw new UnauthorizedActionException("Unauthorized: Only the employer who posted this job can add reviews.");
         }
 
         Review review = new Review(reviewDTO.getRating(), reviewDTO.getComment(), job, job.getEmployer());

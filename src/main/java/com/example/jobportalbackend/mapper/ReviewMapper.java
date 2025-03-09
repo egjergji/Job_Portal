@@ -2,7 +2,9 @@ package com.example.jobportalbackend.mapper;
 
 import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.model.entity.Review;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReviewMapper extends AbstractMapper<Review, ReviewDTO> {
 
     @Override
