@@ -39,7 +39,29 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    // ✅ Authenticate User (Uses UserMapper)
+    public Long getJobSeekerIdByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
+
+        if (user instanceof JobSeeker) {
+            return user.getId();
+        } else {
+            throw new ResourceNotFoundException("User is not a job seeker: " + username);
+        }
+    }
+
+    public Long getEmployerIdByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
+
+        if (user instanceof Employer) {
+            return user.getId();
+        } else {
+            throw new ResourceNotFoundException("User is not an employer: " + username);
+        }
+    }
+
+
     public String authenticate(UserDTO userDTO) {
         try {
             authenticationManager.authenticate(
@@ -55,7 +77,7 @@ public class UserService {
         }
     }
 
-    // ✅ Register User (Handles Duplicate User, Uses UserMapper)
+
     public UserDTO register(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new DuplicateResourceException("Username already taken");
@@ -87,7 +109,7 @@ public class UserService {
         }
 
         User savedUser = userRepository.save(newUser);
-        return userMapper.toDto(savedUser);  // ✅ Uses UserMapper
+        return userMapper.toDto(savedUser);
     }
 
     // ✅ Get All Users (Uses UserMapper)
@@ -97,10 +119,10 @@ public class UserService {
                 ? userRepository.findByRole(role, fixedPageable)
                 : userRepository.findAll(fixedPageable);
 
-        return users.map(userMapper::toDto);  // ✅ Uses UserMapper
+        return users.map(userMapper::toDto);
     }
 
-    // ✅ Delete User by ID (Handles User Not Found)
+
     public void deleteUser(@NonNull Long id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User with ID " + id + " not found");
