@@ -59,7 +59,7 @@ public class JobSeekerController {
     }
 
     @GetMapping("/jobs")
-    @PreAuthorize("hasAuthority(ROLE_JOBSEEKER)")
+    @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
     public List<JobDTO> viewAllJobs(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Long employerId,
