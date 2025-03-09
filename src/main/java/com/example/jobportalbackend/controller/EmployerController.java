@@ -1,6 +1,7 @@
 package com.example.jobportalbackend.controller;
 
 import com.example.jobportalbackend.model.dto.ApplicationDTO;
+import com.example.jobportalbackend.model.dto.JobDTO;
 import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.enums.ApplicationStatus;
@@ -28,13 +29,13 @@ public class EmployerController {
 
     @PostMapping("/{employerId}/jobs")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
-    public Job postJob(@PathVariable Long employerId, @RequestBody Job job) {
-        return jobService.createJob(employerId, job);
+    public JobDTO postJob(@PathVariable Long employerId, @RequestBody Job job) {
+        return jobService.createJob(employerId, new JobDTO());
     }
 
     @GetMapping("/{employerId}/jobs")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
-    public List<Job> getJobsByEmployer(
+    public List<JobDTO> getJobsByEmployer(
             @PathVariable Long employerId,
             @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page) {

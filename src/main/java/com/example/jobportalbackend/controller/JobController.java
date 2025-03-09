@@ -1,5 +1,6 @@
 package com.example.jobportalbackend.controller;
 
+import com.example.jobportalbackend.model.dto.JobDTO;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.service.JobService;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,8 @@ public class JobController {
     }
 
     @PostMapping("/{employerId}")
-    public Job createJob(@PathVariable Long employerId, @RequestBody Job job) {
-        return jobService.createJob(employerId, job);
+    public JobDTO createJob(@PathVariable Long employerId, @RequestBody Job job) {
+        return jobService.createJob(employerId, new JobDTO());
     }
 
 }
