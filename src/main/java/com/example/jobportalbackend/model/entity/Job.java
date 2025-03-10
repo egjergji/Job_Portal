@@ -15,8 +15,6 @@ public class Job {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
-    private String description;
 
     @ManyToOne
     @JoinColumn(name = "employer_id", nullable = false)
@@ -24,10 +22,9 @@ public class Job {
 
     public Job() {}
 
-    public Job(String title, String location, String description, Employer employer) {
+    public Job(String title, String location, Employer employer) {
         this.title = title;
         this.location = location;
-        this.description = description;
         this.employer = employer;
     }
 
@@ -55,13 +52,6 @@ public class Job {
         this.location = location;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public Employer getEmployer() {
         return employer;

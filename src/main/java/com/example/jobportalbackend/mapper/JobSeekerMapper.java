@@ -14,7 +14,6 @@ public class JobSeekerMapper extends AbstractMapper<JobSeeker, JobSeekerDTO> {
         }
         JobSeekerDTO jobSeekerDTO = new JobSeekerDTO();
         jobSeekerDTO.setUsername(jobSeeker.getUsername());
-        jobSeekerDTO.setEmail(jobSeeker.getEmail());
         jobSeekerDTO.setPhoneNumber(jobSeeker.getPhoneNumber());
         return jobSeekerDTO;
     }
@@ -26,7 +25,6 @@ public class JobSeekerMapper extends AbstractMapper<JobSeeker, JobSeekerDTO> {
         }
         JobSeeker jobSeeker = new JobSeeker();
         jobSeeker.setUsername(jobSeekerDTO.getUsername());
-        jobSeeker.setEmail(jobSeekerDTO.getEmail());
         jobSeeker.setPhoneNumber(jobSeekerDTO.getPhoneNumber());
         return jobSeeker;
     }

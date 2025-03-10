@@ -6,18 +6,17 @@ import jakarta.persistence.*;
 @Entity
 public class Employer extends User {
 
-    @Column(nullable = false)
+    @Column
     private String companyName;
 
-    @Column(nullable = false)
+    @Column
     private String companyDescription;
 
     public Employer() {}
 
-    public Employer(String username, String password, Role role, String companyName, String companyDescription) {
+    public Employer(String username, String password, Role role, String companyName) {
         super(username, password, role);
         this.companyName = companyName;
-        this.companyDescription = companyDescription;
     }
 
     public String getCompanyName() { return companyName; }

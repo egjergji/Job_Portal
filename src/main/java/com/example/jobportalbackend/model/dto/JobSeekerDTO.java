@@ -8,14 +8,10 @@ public class JobSeekerDTO extends UserDTO {
 
     public JobSeekerDTO() {}
 
-    public JobSeekerDTO(Long id, String username, String email, String phoneNumber) {
+    public JobSeekerDTO(Long id, String username, String phoneNumber) {
         super(username, Role.JOBSEEKER);
-        this.email = email;
         this.phoneNumber = phoneNumber;
     }
-
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
 
     public String getPhoneNumber() {
         return phoneNumber;

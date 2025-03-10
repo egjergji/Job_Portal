@@ -7,7 +7,6 @@ public class UserDTO {
     private Role role;
     private String companyName;
     private String companyDescription;
-    private String email;
     private String phoneNumber;
 
 
@@ -20,12 +19,11 @@ public class UserDTO {
 
     public UserDTO(String username, Role role,
                    String companyName, String companyDescription,
-                   String email, String phoneNumber) {
+                   String phoneNumber) {
         this.username = username;
         this.role = role;
         this.companyName = companyName;
         this.companyDescription = companyDescription;
-        this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
@@ -62,13 +60,6 @@ public class UserDTO {
         this.companyDescription = companyDescription;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;

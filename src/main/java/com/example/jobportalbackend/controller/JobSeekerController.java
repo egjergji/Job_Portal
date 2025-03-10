@@ -6,12 +6,16 @@ import com.example.jobportalbackend.security.JwtUtil;
 import com.example.jobportalbackend.service.JobSeekerService;
 import com.example.jobportalbackend.service.UserService;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/jobseeker")
@@ -40,12 +44,18 @@ public class JobSeekerController {
         return jobSeekerService.applyForJob(jobSeekerId, jobId);
     }
 
-    @PutMapping("/resume")
+    @PostMapping("/resume")
     @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
-    public void uploadResume(@RequestParam String resumeLink, HttpServletRequest request) {
+    public ResponseEntity<String> uploadResume(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         Long jobSeekerId = getAuthenticatedJobSeekerId(request);
-        jobSeekerService.uploadResume(jobSeekerId, resumeLink);
+        try {
+            jobSeekerService.uploadResume(jobSeekerId, file);
+            return ResponseEntity.status(HttpStatus.OK).body("Resume uploaded successfully.");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload resume.");
+        }
     }
+
 
     @GetMapping("/applications")
     @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")

@@ -14,6 +14,7 @@ import com.example.jobportalbackend.model.entity.User;
 import com.example.jobportalbackend.model.enums.Role;
 import com.example.jobportalbackend.repository.UserRepository;
 import com.example.jobportalbackend.security.JwtUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -100,15 +101,13 @@ public class UserService {
                     userDTO.getUsername(),
                     encodedPassword,
                     Role.EMPLOYER,
-                    userDTO.getCompanyName(),
-                    userDTO.getCompanyDescription()
+                    userDTO.getCompanyName()
             );
         } else if (userDTO.getRole() == Role.JOBSEEKER) {
             newUser = new JobSeeker(
                     userDTO.getUsername(),
                     encodedPassword,
                     Role.JOBSEEKER,
-                    userDTO.getEmail(),
                     userDTO.getPhoneNumber()
             );
         } else {
@@ -133,7 +132,7 @@ public class UserService {
         return users.map(userMapper::toDto);
     }
 
-
+@Transactional
     public void deleteUser(@NonNull String username) {
         if (!userRepository.existsByUsername(username)) {
             throw new ResourceNotFoundException("User with username " + username + " not found");
