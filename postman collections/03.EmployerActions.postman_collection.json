@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "f21757f3-c782-4e94-95fd-87e397fa3ac8",
+		"name": "03.EmployerActions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40277824"
+	},
+	"item": [
+		{
+			"name": "EmployerLogin(token gen)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employer\",\r\n    \"password\": \"employer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JobPosting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjA0NTc2LCJleHAiOjE3NDE2OTA5NzZ9.U9q7n2esALfrN5QlUJRbBLZDSSLbtj5n_t3flFW9Qnw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Tech Support\",\r\n  \"location\": \"Tirane\"\r\n  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employer/jobs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employer",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ViewJobs Posted by employer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjAyMzUzLCJleHAiOjE3NDE2ODg3NTN9.Hyiu8-ERboCwsVTt4QBpvunIhHC4QWbURZ8V2Z1DDus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"josh\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employer/jobs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employer",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Job Applications",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjA0NTc2LCJleHAiOjE3NDE2OTA5NzZ9.U9q7n2esALfrN5QlUJRbBLZDSSLbtj5n_t3flFW9Qnw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"rating\": 5,\r\n  \"comment\": \"Great job opportunity with a fantastic team!\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employer/jobs/2/applications",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employer",
+						"jobs",
+						"2",
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Application status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjA0NTc2LCJleHAiOjE3NDE2OTA5NzZ9.U9q7n2esALfrN5QlUJRbBLZDSSLbtj5n_t3flFW9Qnw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employer/jobs/1/aplications/1/status?status=APPROVED",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employer",
+						"jobs",
+						"1",
+						"aplications",
+						"1",
+						"status"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "APPROVED"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a rating to a  job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjAzMzUwLCJleHAiOjE3NDE2ODk3NTB9.9NdKPEGFjg2oaTXNJqAP-53-oUxk9MD5-rSBO035fTs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"rating\": 5,\r\n  \"comment\": \"Great job opportunity with a fantastic team!\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employer/jobs/1/reviews",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employer",
+						"jobs",
+						"1",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
