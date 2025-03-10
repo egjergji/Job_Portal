@@ -69,15 +69,14 @@ public class EmployerController {
         return applicationService.getApplicationsForJob(employerId, jobId, status, page).getContent();
     }
 
-    @PutMapping("/jobs/{jobId}/applications/{applicationId}/status")
+    @PutMapping("applications/{applicationId}/status")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     public void updateApplicationStatus(
-            @PathVariable Long jobId,
             @PathVariable Long applicationId,
             @RequestParam ApplicationStatus status,
             HttpServletRequest request) {
         Long employerId = getAuthenticatedEmployerId(request);
-        applicationService.updateApplicationStatus(applicationId, employerId, jobId, status);
+        applicationService.updateApplicationStatus(applicationId, employerId, status);
     }
 
     @PostMapping("/jobs/{jobId}/reviews")

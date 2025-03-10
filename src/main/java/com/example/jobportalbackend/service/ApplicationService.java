@@ -47,7 +47,7 @@ public class ApplicationService {
         return applicationPage.map(applicationMapper::toDto);
     }
 
-    public void updateApplicationStatus(Long applicationId, Long employerId, Long jobId, ApplicationStatus status) {
+    public void updateApplicationStatus(Long applicationId, Long employerId,  ApplicationStatus status) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Application with ID " + applicationId + " not found"));
 
