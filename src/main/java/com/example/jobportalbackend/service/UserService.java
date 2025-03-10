@@ -108,7 +108,7 @@ public class UserService {
                     userDTO.getUsername(),
                     encodedPassword,
                     Role.JOBSEEKER,
-                    userDTO.getResumeLink(),
+                    userDTO.getEmail(),
                     userDTO.getPhoneNumber()
             );
         } else {
