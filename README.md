@@ -61,23 +61,23 @@ the other has postman collections for testing the funcionallity of the applicati
 
 #Admin APIs			
 GET	/api/admin/users?page=0&role=EMPLOYER	       --ADMIN	Get all users (pagination & filtering)
-DELETE	/api/admin/users/delete/{id}	     --ADMIN	Delete a user
+DELETE	/api/admin/users/{username}	     --ADMIN	Delete a user
 
 #Employer APIs			
-POST	/api/employer/{employerId}/jobs	     --EMPLOYER	Post a new job
-GET	/api/employer/{employerId}/jobs	     --EMPLOYER	View employer’s jobs
-GET	/api/employer/{employerId}/jobs/{jobId}/applications	   --EMPLOYER	View applications for a job
-PUT	/api/employer/{employerId}/jobs/{jobId}/applications/{applicationId}/status?status=ACCEPTED	EMPLOYER	   --Update application status
-POST	/api/employer/{employerId}/jobs/{jobId}/reviews	    --EMPLOYER	Add a review for a job
+POST	/api/employer/jobs	     --EMPLOYER	Post a new job
+GET	/api/employer/jobs	     --EMPLOYER	View employer’s jobs
+GET	/api/employer/jobs/{jobId}/applications	   --EMPLOYER	View applications for a job
+PUT	/api/employer/applications/{applicationId}/status?status=ACCEPTED	EMPLOYER	   --Update application status
+POST	/api/employer/jobs/{jobId}/reviews	    --EMPLOYER	Add a review for a job
 
 #Job Seeker APIs			
-POST	/api/jobseekers/{jobSeekerId}/apply?jobId=5	      --JOB_SEEKER	Apply for a job
-PUT	/api/jobseekers/{jobSeekerId}/resume?resumeLink=https://example.com/resume.pdf	    --JOB_SEEKER	Upload a resume
-GET	/api/jobseekers/{jobSeekerId}/applications?page=0&jobTitle=Engineer&status=PENDING	    --JOB_SEEKER	View own applications
-GET	/api/jobseekers/jobs?page=0&title=Engineer&employerId=3	   --PUBLIC	View all jobs
+POST	/api/jobseeker/apply?jobId=5	      --JOB_SEEKER	Apply for a job
+PUT	/api/jobseeker/resume	    --JOB_SEEKER	Upload a resume
+GET	/api/jobseeker/applications?page=0&jobTitle=Engineer&status=PENDING	    --JOB_SEEKER	View own applications
+GET	/api/jobseeker/jobs?page=0&title=Engineer&employerId=3	   --PUBLIC	View all jobs
 
 #Review APIs			
-GET	/api/reviews/job/{jobId}?page=0&minRating=4	PUBLIC     --Get reviews for a job
+GET	/api/reviews/job/{jobId}?page=0&minRating=4	    --Get reviews for a job
 
 
 
