@@ -6,7 +6,6 @@ import com.example.jobportalbackend.mapper.ReviewMapper;
 import com.example.jobportalbackend.model.dto.ReviewDTO;
 import com.example.jobportalbackend.model.entity.Job;
 import com.example.jobportalbackend.model.entity.Review;
-import com.example.jobportalbackend.repository.EmployerRepository;
 import com.example.jobportalbackend.repository.JobRepository;
 import com.example.jobportalbackend.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
@@ -18,14 +17,12 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final JobRepository jobRepository;
-    private final EmployerRepository employerRepository;
     private final ReviewMapper reviewMapper;
 
     public ReviewService(ReviewRepository reviewRepository, JobRepository jobRepository,
-                         EmployerRepository employerRepository, ReviewMapper reviewMapper) {
+                          ReviewMapper reviewMapper) {
         this.reviewRepository = reviewRepository;
         this.jobRepository = jobRepository;
-        this.employerRepository = employerRepository;
         this.reviewMapper = reviewMapper;
     }
 
