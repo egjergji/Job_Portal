@@ -7,7 +7,7 @@ public class UserDTO {
     private Role role;
     private String companyName;
     private String companyDescription;
-    private String resumeLink;
+    private String email;
     private String phoneNumber;
 
 
@@ -20,12 +20,12 @@ public class UserDTO {
 
     public UserDTO(String username, Role role,
                    String companyName, String companyDescription,
-                   String resumeLink, String phoneNumber) {
+                   String email, String phoneNumber) {
         this.username = username;
         this.role = role;
         this.companyName = companyName;
         this.companyDescription = companyDescription;
-        this.resumeLink = resumeLink;
+        this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
@@ -62,12 +62,12 @@ public class UserDTO {
         this.companyDescription = companyDescription;
     }
 
-    public String getResumeLink() {
-        return resumeLink;
+    public String getEmail() {
+        return email;
     }
 
-    public void setResumeLink(String resumeLink) {
-        this.resumeLink = resumeLink;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {

@@ -7,21 +7,21 @@ import jakarta.persistence.*;
 public class JobSeeker extends User {
 
     @Column(nullable = false)
-    private String resumeLink;
+    private String email;
 
     @Column(nullable = false)
     private String phoneNumber;
 
     public JobSeeker() {}
 
-    public JobSeeker(String username, String password, Role role, String resumeLink, String phoneNumber) {
+    public JobSeeker(String username, String password, Role role, String email, String phoneNumber) {
         super(username, password, role);
-        this.resumeLink = resumeLink;
+        this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public String getResumeLink() { return resumeLink; }
-    public void setResumeLink(String resumeLink) { this.resumeLink = resumeLink; }
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }

@@ -3,24 +3,19 @@ package com.example.jobportalbackend.model.dto;
 import com.example.jobportalbackend.model.enums.Role;
 
 public class JobSeekerDTO extends UserDTO {
-    private String resumeLink;
+    private String email;
     private String phoneNumber;
 
     public JobSeekerDTO() {}
 
-    public JobSeekerDTO(Long id, String username, String resumeLink, String phoneNumber) {
+    public JobSeekerDTO(Long id, String username, String email, String phoneNumber) {
         super(username, Role.JOBSEEKER);
-        this.resumeLink = resumeLink;
+        this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public String getResumeLink() {
-        return resumeLink;
-    }
-
-    public void setResumeLink(String resumeLink) {
-        this.resumeLink = resumeLink;
-    }
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
 
     public String getPhoneNumber() {
         return phoneNumber;

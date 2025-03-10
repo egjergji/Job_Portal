@@ -61,11 +61,11 @@ public class JobSeekerService {
         return applicationMapper.toDto(savedApplication);
     }
 
-    public void uploadResume(Long jobSeekerId, String resumeLink) {
+    public void uploadResume(Long jobSeekerId, String email) {
         JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job Seeker with ID " + jobSeekerId + " not found"));
 
-        jobSeeker.setResumeLink(resumeLink);
+        jobSeeker.setEmail(email);
         jobSeekerRepository.save(jobSeeker);
     }
 

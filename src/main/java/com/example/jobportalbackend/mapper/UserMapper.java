@@ -30,7 +30,7 @@ public class UserMapper extends AbstractMapper<User, UserDTO> {
                 user.getRole(),
                 (user instanceof Employer) ? ((Employer) user).getCompanyName() : null,
                 (user instanceof Employer) ? ((Employer) user).getCompanyDescription() : null,
-                (user instanceof JobSeeker) ? ((JobSeeker) user).getResumeLink() : null,
+                (user instanceof JobSeeker) ? ((JobSeeker) user).getEmail() : null,
                 (user instanceof JobSeeker) ? ((JobSeeker) user).getPhoneNumber() : null
         );
     }
