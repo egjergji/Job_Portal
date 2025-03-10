@@ -51,10 +51,11 @@ public class EmployerController {
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     public List<JobDTO> getJobsByEmployer(
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) String location,
             @RequestParam(defaultValue = "0") int page,
             HttpServletRequest request) {
         Long employerId = getAuthenticatedEmployerId(request);
-        return jobService.getJobsByEmployer(employerId, title, page).getContent();
+        return jobService.getJobsByEmployer(employerId, title, location, page).getContent();
     }
 
     @GetMapping("/jobs/{jobId}/applications")

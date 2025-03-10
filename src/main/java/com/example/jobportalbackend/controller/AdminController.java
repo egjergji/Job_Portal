@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class UserController {
+public class AdminController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
@@ -24,15 +24,14 @@ public class UserController {
     public List<UserDTO> getAllUsers(
             @RequestParam(required = false) Role role,
             @RequestParam(defaultValue = "0") int page) {
-
         return userService.getAllUsers(role, page).getContent();
     }
 
 
-    @DeleteMapping("/users/delete/{id}")
+    @DeleteMapping("/users/{username}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public void deleteUser(@PathVariable @NonNull Long id) {
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable @NonNull String username) {
+        userService.deleteUser(username);
     }
 
 }

@@ -3,15 +3,17 @@ package com.example.jobportalbackend.model.dto;
 public class JobDTO {
     private Long id;
     private String title;
+    private String location;
     private String description;
     private Long employerId;
 
     public JobDTO() {}
 
 
-    public JobDTO(Long id, String title, String description, Long employerId) {
+    public JobDTO(Long id, String title, String location, String description, Long employerId) {
         this.id = id;
         this.title = title;
+        this.location = location;
         this.description = description;
         this.employerId = employerId;
     }
@@ -46,5 +48,13 @@ public class JobDTO {
 
     public void setEmployerId(Long employerId) {
         this.employerId = employerId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

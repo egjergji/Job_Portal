@@ -38,14 +38,14 @@ public class JobService {
     }
 
 
-    public Page<JobDTO> getJobsByEmployer(Long employerId, String title, int page) {
+    public Page<JobDTO> getJobsByEmployer(Long employerId, String title, String location, int page) {
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer with ID " + employerId + " not found"));
 
         Pageable fixedPageable = PageRequest.of(page, 10);
 
-        Page<Job> jobs = (title != null && !title.isEmpty())
-                ? jobRepository.findByEmployerAndTitleContainingIgnoreCase(employer, title, fixedPageable)
+        Page<Job> jobs = ((title != null && !title.isEmpty()) || (location != null && !location.isEmpty()))
+                ? jobRepository.findByEmployerAndTitleContainingIgnoreCaseOrLocationContainingIgnoreCase(employer, title, location, fixedPageable)
                 : jobRepository.findByEmployer(employer, fixedPageable);
 
         return jobs.map(jobMapper::toDto);

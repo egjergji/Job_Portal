@@ -13,6 +13,9 @@ public class Job {
     private String title;
 
     @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne
@@ -21,8 +24,9 @@ public class Job {
 
     public Job() {}
 
-    public Job(String title, String description, Employer employer) {
+    public Job(String title, String location, String description, Employer employer) {
         this.title = title;
+        this.location = location;
         this.description = description;
         this.employer = employer;
     }
@@ -41,6 +45,14 @@ public class Job {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getDescription() {

@@ -88,8 +88,8 @@ public class JobSeekerService {
         return jobSeekerMapper.toDto(jobSeeker);
     }
 
-    public Page<JobDTO> viewAllJobs(String title, Long employerId, Pageable pageable) {
-        return jobRepository.findJobsWithFilters(title, employerId, pageable)
+    public Page<JobDTO> viewAllJobs(String title, String location, Long employerId, Pageable pageable) {
+        return jobRepository.findJobsWithFilters(title, location, employerId, pageable)
                 .map(jobMapper::toDto);
     }
 }

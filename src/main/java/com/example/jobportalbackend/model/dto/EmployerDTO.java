@@ -9,7 +9,7 @@ public class EmployerDTO extends UserDTO {
     public EmployerDTO() {}
 
     public EmployerDTO(Long id, String username,Role role, String companyName, String companyDescription) {
-        super(id, username, role);
+        super(username, role);
         this.companyName = companyName;
         this.companyDescription = companyDescription;
     }

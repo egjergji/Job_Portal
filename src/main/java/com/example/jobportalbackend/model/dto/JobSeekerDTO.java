@@ -9,7 +9,7 @@ public class JobSeekerDTO extends UserDTO {
     public JobSeekerDTO() {}
 
     public JobSeekerDTO(Long id, String username, String resumeLink, String phoneNumber) {
-        super(id, username, Role.JOBSEEKER);
+        super(username, Role.JOBSEEKER);
         this.resumeLink = resumeLink;
         this.phoneNumber = phoneNumber;
     }

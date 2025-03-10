@@ -1,7 +1,9 @@
 package com.example.jobportalbackend.controller;
 
+import com.example.jobportalbackend.model.dto.LoginRequest;
+import com.example.jobportalbackend.model.dto.LoginResponse;
+import com.example.jobportalbackend.model.dto.RegisterRequest;
 import com.example.jobportalbackend.model.dto.UserDTO;
-import com.example.jobportalbackend.security.JwtUtil;
 import com.example.jobportalbackend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,21 +13,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.register(userDTO));
+    public ResponseEntity<UserDTO> register(@RequestBody RegisterRequest registerRequest) {
+        return ResponseEntity.ok(userService.register(registerRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
-        String token = userService.authenticate(userDTO);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(userService.authenticate(loginRequest));
     }
 }
+

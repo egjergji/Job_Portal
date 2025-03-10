@@ -13,7 +13,6 @@ public class EmployerMapper extends AbstractMapper<Employer, EmployerDTO> {
             return null;
         }
         EmployerDTO employerDTO = new EmployerDTO();
-        employerDTO.setId(employer.getId());
         employerDTO.setUsername(employer.getUsername());
         employerDTO.setCompanyName(employer.getCompanyName());
         employerDTO.setCompanyDescription(employer.getCompanyDescription());

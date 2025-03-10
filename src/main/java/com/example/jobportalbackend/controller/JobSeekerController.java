@@ -62,8 +62,9 @@ public class JobSeekerController {
     @PreAuthorize("hasAuthority('ROLE_JOBSEEKER')")
     public List<JobDTO> viewAllJobs(
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) String location,
             @RequestParam(required = false) Long employerId,
             @RequestParam(defaultValue = "0") int page) {
-        return jobSeekerService.viewAllJobs(title, employerId, PageRequest.of(page, 10)).getContent();
+        return jobSeekerService.viewAllJobs(title, location, employerId, PageRequest.of(page, 10)).getContent();
     }
 }

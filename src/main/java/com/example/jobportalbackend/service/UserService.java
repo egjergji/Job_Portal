@@ -4,6 +4,9 @@ import com.example.jobportalbackend.exception.ResourceNotFoundException;
 import com.example.jobportalbackend.exception.DuplicateResourceException;
 import com.example.jobportalbackend.exception.AuthenticationException;
 import com.example.jobportalbackend.mapper.UserMapper;
+import com.example.jobportalbackend.model.dto.LoginRequest;
+import com.example.jobportalbackend.model.dto.LoginResponse;
+import com.example.jobportalbackend.model.dto.RegisterRequest;
 import com.example.jobportalbackend.model.dto.UserDTO;
 import com.example.jobportalbackend.model.entity.Employer;
 import com.example.jobportalbackend.model.entity.JobSeeker;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,32 +66,39 @@ public class UserService {
     }
 
 
-    public String authenticate(UserDTO userDTO) {
+    public LoginResponse authenticate(LoginRequest loginRequest) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
 
-            User user = userRepository.findByUsername(userDTO.getUsername())
+            User user = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new AuthenticationException("Invalid username or password"));
 
-            return jwtUtil.generateToken(user.getUsername());
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(jwtUtil.generateToken(user, authentication));
+            loginResponse.setUser(userMapper.toDto(user));
+
+            return loginResponse;
         } catch (org.springframework.security.core.AuthenticationException e) {
             throw new AuthenticationException("Invalid username or password");
         }
     }
 
 
-    public UserDTO register(UserDTO userDTO) {
-        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+    public UserDTO register(RegisterRequest registerRequest) {
+        if (userRepository.findByUsername(registerRequest.getUserDetails().getUsername()).isPresent()) {
             throw new DuplicateResourceException("Username already taken");
         }
+
+        UserDTO userDTO = registerRequest.getUserDetails();
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
         User newUser;
         if (userDTO.getRole() == Role.EMPLOYER) {
             newUser = new Employer(
                     userDTO.getUsername(),
-                    passwordEncoder.encode(userDTO.getPassword()),
+                    encodedPassword,
                     Role.EMPLOYER,
                     userDTO.getCompanyName(),
                     userDTO.getCompanyDescription()
@@ -95,7 +106,7 @@ public class UserService {
         } else if (userDTO.getRole() == Role.JOBSEEKER) {
             newUser = new JobSeeker(
                     userDTO.getUsername(),
-                    passwordEncoder.encode(userDTO.getPassword()),
+                    encodedPassword,
                     Role.JOBSEEKER,
                     userDTO.getResumeLink(),
                     userDTO.getPhoneNumber()
@@ -103,7 +114,7 @@ public class UserService {
         } else {
             newUser = new User(
                     userDTO.getUsername(),
-                    passwordEncoder.encode(userDTO.getPassword()),
+                    encodedPassword,
                     Role.ADMIN
             );
         }
@@ -123,10 +134,10 @@ public class UserService {
     }
 
 
-    public void deleteUser(@NonNull Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User with ID " + id + " not found");
+    public void deleteUser(@NonNull String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new ResourceNotFoundException("User with username " + username + " not found");
         }
-        userRepository.deleteById(id);
+        userRepository.deleteByUsername(username);
     }
 }

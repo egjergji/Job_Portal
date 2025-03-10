@@ -15,9 +15,7 @@ public class UserMapper extends AbstractMapper<User, UserDTO> {
             return null;
         }
         User user = new User();
-        user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
         return user;
     }
@@ -28,9 +26,7 @@ public class UserMapper extends AbstractMapper<User, UserDTO> {
             return null;
         }
         return new UserDTO(
-                user.getId(),
                 user.getUsername(),
-                user.getPassword(),
                 user.getRole(),
                 (user instanceof Employer) ? ((Employer) user).getCompanyName() : null,
                 (user instanceof Employer) ? ((Employer) user).getCompanyDescription() : null,

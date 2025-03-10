@@ -13,7 +13,6 @@ public class JobSeekerMapper extends AbstractMapper<JobSeeker, JobSeekerDTO> {
             return null;
         }
         JobSeekerDTO jobSeekerDTO = new JobSeekerDTO();
-        jobSeekerDTO.setId(jobSeeker.getId());
         jobSeekerDTO.setUsername(jobSeeker.getUsername());
         jobSeekerDTO.setResumeLink(jobSeeker.getResumeLink());
         jobSeekerDTO.setPhoneNumber(jobSeeker.getPhoneNumber());

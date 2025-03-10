@@ -36,7 +36,6 @@ public class ApplicationService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job with ID " + jobId + " not found"));
 
-
         if (!job.getEmployer().getId().equals(employerId)) {
             throw new UnauthorizedActionException("Unauthorized: You can only view applications for jobs you posted.");
         }
