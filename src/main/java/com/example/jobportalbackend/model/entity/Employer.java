@@ -14,9 +14,10 @@ public class Employer extends User {
 
     public Employer() {}
 
-    public Employer(String username, String password, Role role, String companyName) {
+    public Employer(String username, String password, Role role, String companyName, String companyDescription) {
         super(username, password, role);
         this.companyName = companyName;
+        this.companyDescription = companyDescription;
     }
 
     public String getCompanyName() { return companyName; }

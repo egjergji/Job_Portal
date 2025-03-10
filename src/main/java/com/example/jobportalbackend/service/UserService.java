@@ -101,7 +101,8 @@ public class UserService {
                     userDTO.getUsername(),
                     encodedPassword,
                     Role.EMPLOYER,
-                    userDTO.getCompanyName()
+                    userDTO.getCompanyName(),
+                    userDTO.getCompanyDescription()
             );
         } else if (userDTO.getRole() == Role.JOBSEEKER) {
             newUser = new JobSeeker(
