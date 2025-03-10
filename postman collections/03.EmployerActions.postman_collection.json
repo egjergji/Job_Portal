@@ -172,7 +172,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llciIsImF1dGgiOiJST0xFX0VNUExPWUVSIiwiaWF0IjoxNzQxNjA0NTc2LCJleHAiOjE3NDE2OTA5NzZ9.U9q7n2esALfrN5QlUJRbBLZDSSLbtj5n_t3flFW9Qnw",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NodWEiLCJhdXRoIjoiUk9MRV9FTVBMT1lFUiIsImlhdCI6MTc0MTYwNjk1MiwiZXhwIjoxNzQxNjkzMzUyfQ.qCMxN3xrxtOt9xjDzxJn_6s8bjAxoF6UfWoVVTpMt_c",
 							"type": "string"
 						}
 					]
@@ -189,7 +189,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/employer/jobs/1/aplications/1/status?status=APPROVED",
+					"raw": "http://localhost:8080/api/employer/aplications/3/status?status=APPROVED",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -198,10 +198,8 @@
 					"path": [
 						"api",
 						"employer",
-						"jobs",
-						"1",
 						"aplications",
-						"1",
+						"3",
 						"status"
 					],
 					"query": [
